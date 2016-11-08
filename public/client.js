@@ -28,7 +28,7 @@ var recipeTemplate = (
 );
 
 
-var serverBase = '//localhost:8080/';
+var serverBase = 'https://merciful-colt.hyperdev.space/';
 var RECIPES_URL = serverBase + 'recipes';
 var SHOPPING_LIST_URL = serverBase + 'shopping-list';
 
