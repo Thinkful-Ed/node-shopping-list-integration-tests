@@ -1,82 +1,47 @@
-/* styles */
-/* called by your view template */
-
-/* You might want to try something fancier: */
-/* less: http://lesscss.org/ */
-
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: helvetica, arial, sans-serif;
-  margin: 25px;
+  font-family: 'Roboto', sans-serif;
 }
 
-h1 {
-  font-weight: bold;
-  color: pink;
-}
-
-.bold {
-  font-weight: bold;
-}
-
-p {
-  max-width: 600px;
-}
-
-form {
-  margin-bottom: 25px;
-  padding: 15px;
-  background-color: cyan;
-  display: inline-block;
-  width: 100%;
-  max-width: 340px;
-  border-radius: 3px;
-}
-
-input {
-  display: block;
-  margin-bottom: 10px;
+button, input[type="text"] {
   padding: 5px;
-  width: 100%;
-  border: 1px solid lightgrey;
-  border-radius: 3px;
-  font-size: 16px;
-}
-
-button {
-  font-size: 16px;
-  border-radius: 3px;
-  background-color: lightgrey;
-  border: 1px solid grey;
-  box-shadow: 2px 2px teal;
-  cursor: pointer;
 }
 
 button:hover {
-  background-color: yellow;
+  cursor: pointer;
 }
 
-button:active {
-  box-shadow: none;
+#shopping-list-item {
+  width: 250px;
 }
 
-li {
-  margin-bottom: 5px;
+.container {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-footer {
-  margin-top: 50px;
-  padding-top: 25px;
-  border-top: 1px solid lightgrey;
+.shopping-list {
+  list-style: none;
+  padding-left: 0;
 }
 
-footer > a {
-  color: #BBBBBB;
+.shopping-list > li {
+  margin-bottom: 20px;
+  border: 1px solid grey;
+  padding: 20px;
 }
 
-.nicejob {
+.shopping-item {
+  display: block;
+  color: grey;
+  font-style: italic;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.shopping-item__checked {
   text-decoration: line-through;
 }

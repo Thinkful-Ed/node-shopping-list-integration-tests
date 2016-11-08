@@ -1,54 +1,44 @@
-<!-- This is a static file -->
-<!-- served from your routes in server.js -->
-
-<!-- You might want to try something fancier: -->
-<!-- html/nunjucks docs: http://mozilla.github.io/nunjucks/ -->
-<!-- jade: http://jade-lang.com/ -->
-<!-- haml: http://haml.info/tutorial.html -->
-<!-- hbs(handlebars): http://handlebarsjs.com/expressions.html -->
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>Welcome to HyperDev!</title>
-    <meta name="description" content="A cool thing made with HyperDev">
+    <meta name="description" content="Shopping and to do lists">
     <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <header>
-      <h1>
-        A Dream of the Future
-      </h1>
-    </header>
+    <div class="container">
+      <header>
+        <h1>All the lists</h1>
+      </header>
+      <main>
+        <section>
+          <h2>Shopping list</h2>
+          <form id="js-shopping-list-form">
+            <label for="shopping-list-entry">Add an item</label>
+            <input type="text" name="shopping-list-entry" id="js-new-item" placeholder="e.g., broccoli">
+            <button type="submit">Add item</button>
+          </form>
 
-    <main>
-      <p class="bold">Oh hi,</p>
-      <p>Tell me your hopes and dreams:</p>
-      <form>
-        <input type="text" maxlength="100" placeholder="Dreams!">
-        <button type="submit">Submit</button>
-      </form>
-      <section class="dreams">
-        <ul id="dreams">
-        </ul>
-      </section>
-    </main>
-
-    <footer>
-      <a href="https://hyperdev.com">
-        Remix this in HyperDev
-      </a>
-    </footer>
-
-    <!-- Your web-app is https, so your scripts need to be too -->
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
-            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
-            crossorigin="anonymous"></script>
+          <ul class="shopping-list js-shopping-list">
+          </ul>
+        </section>
+        <!-- <section>
+          <h2>To-do list</h2>
+          <ul class="js-to-do-list"></ul>
+          <form class="to-do-list-form">
+          </form>
+        </section> -->
+      </main>
+    </div>
+    <script src="//code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
     <script src="/client.js"></script>
-
   </body>
 </html>
