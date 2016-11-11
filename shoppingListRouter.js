@@ -51,7 +51,7 @@ router.delete('/:id', (req, res) => {
 // required fields. also ensure that item id in url path, and
 // item id in updated item object match. if problems with any
 // of that, log error and send back status code 400. otherwise
-// call `ShoppingList.updateItem` with updated item.
+// call `ShoppingList.update` with updated item.
 router.put('/:id', jsonParser, (req, res) => {
   const requiredFields = ['name', 'checked', 'id'];
   for (let i=0; i<requiredFields.length; i++) {
