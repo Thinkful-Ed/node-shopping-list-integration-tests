@@ -4,29 +4,28 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-// the `{recipesStorage: storage}` syntax uses destructuring
-// assignment to import `recipesStorage` and immediatley
-// rename it to `storage` inside this module.
-const {recipesStorage: storage} = require('./storage');
+const {ShoppingList} = require('./models');
 
-// we're going to add some recipes to storage
+// we're going to add some items to ShoppingList
 // so there's some data to look at
-storage.add('boiled white rice', ['1 cup white rice', '2 cups water', 'pinch of salt']);
-storage.add('milkshake', ['2 tbsp cocoa', '2 cups vanilla ice cream', '1 cup milk']);
+ShoppingList.create('beans', true);
+ShoppingList.create('tomatoes', false);
+ShoppingList.create('peppers', false);
 
-// send back JSON representation of all recipes
-// on GET requests to root
+// when the root of this router is called with GET, return
+// all current ShoppingList items
 router.get('/', (req, res) => {
-  res.json(storage.getItems());
+  res.json(ShoppingList.get());
 });
 
 
-// when new recipe added, ensure has required fields. if not,
-// log error and return 400 status code with hepful message.
-// if okay, add new item, and return it with a status 201.
+// when a new shopping list item is posted, make sure it's
+// got required fields ('name' and 'checked'). if not,
+// log an error and return a 400 status code. if okay,
+// add new item to ShoppingList and return it with a 201.
 router.post('/', jsonParser, (req, res) => {
   // ensure `name` and `budget` are in request body
-  const requiredFields = ['name', 'ingredients'];
+  const requiredFields = ['name', 'checked'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -35,24 +34,26 @@ router.post('/', jsonParser, (req, res) => {
       return res.status(400).send(message);
     }
   }
-  const item = storage.add(req.body.name, req.body.ingredients);
+  const item = ShoppingList.create(req.body.name, req.body.checked);
   res.status(201).json(item);
 });
 
-// Delete recipes (by id)!
+
+// when DELETE request comes in with an id in path,
+// try to delete that item from ShoppingList.
 router.delete('/:id', (req, res) => {
-  storage.deleteItem(req.params.id);
+  ShoppingList.delete(req.params.id);
   console.log(`Deleted shopping list item \`${req.params.ID}\``);
   res.status(204).end();
 });
 
-// when PUT request comes in with updated recipe, ensure has
-// required fields. also ensure that recipe id in url path, and
-// recipe id in updated item object match. if problems with any
+// when PUT request comes in with updated item, ensure has
+// required fields. also ensure that item id in url path, and
+// item id in updated item object match. if problems with any
 // of that, log error and send back status code 400. otherwise
-// call `storage.updateItem` with updated recipe.
+// call `ShoppingList.updateItem` with updated item.
 router.put('/:id', jsonParser, (req, res) => {
-  const requiredFields = ['name', 'ingredients', 'id'];
+  const requiredFields = ['name', 'checked', 'id'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -69,10 +70,10 @@ router.put('/:id', jsonParser, (req, res) => {
     return res.status(400).send(message);
   }
   console.log(`Updating shopping list item \`${req.params.id}\``);
-  const updatedItem = storage.updateItem({
+  const updatedItem = ShoppingList.update({
     id: req.params.id,
     name: req.body.name,
-    ingredients: req.body.ingredients
+    checked: req.body.checked
   });
   res.status(204).json(updatedItem);
 })
