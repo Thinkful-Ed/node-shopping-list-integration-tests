@@ -12,8 +12,8 @@ const uuid = require('uuid');
 
 
 function StorageException(message) {
-   this.message = message;
-   this.name = "StorageException";
+  this.message = message;
+  this.name = "StorageException";
 }
 
 const ShoppingList = {
