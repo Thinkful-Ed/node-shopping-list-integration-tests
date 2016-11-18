@@ -32,7 +32,19 @@ describe('Shopping List', function() {
         done();
       })
   });
-  it('should add an item on POST');
+  it('should add an item on POST', function() {
+    const newItem = {name: 'coffee', checked: false};
+    chai.request(server)
+      .post(newItem)
+      .end(function(err, res) {
+        res.should.have.status(204);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.include.keys('id', 'name', 'checked');
+        res.body.name.should.be(newItem.name);
+        res.body.checked.should.be(newItem.checked);
+      });
+  });
   it('should edit an item on PUT');
   it('should delete an item on DELETE');
 });
