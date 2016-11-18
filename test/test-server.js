@@ -15,6 +15,10 @@ describe('Shopping List', function() {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
+        // because we create three items on app load
+        res.body.should.have.length(3);
+        res.body[0].should.be.a('object');
+        res.body[0].should.include.keys('id', 'name', 'checked');
         done();
       })
   });
