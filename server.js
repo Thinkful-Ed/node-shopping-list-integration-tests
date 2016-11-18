@@ -24,8 +24,8 @@ app.get('/', (req, res) => {
 app.use('/shopping-list', shoppingListRouter);
 app.use('/recipes', recipesRouter);
 
-app.listen(process.env.PORT || 8080, () => {
+const server = app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
 });
 
-module.exports = app;
+module.exports = server;

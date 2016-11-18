@@ -1,15 +1,23 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../server.js');
-const {ShoppingList} = require('../models');
 
 const should = chai.should();
 
 chai.use(chaiHttp);
 
+let server;
+
+beforeEach(function() {
+  server = require('../server');
+});
+
+afterEach(function() {
+  server.close();
+})
+
 describe('Shopping List', function() {
   it('should list items on GET', function(done) {
-    chai.request(app)
+    chai.request(server)
       .get('/shopping-list')
       .end(function(err, res) {
         res.should.have.status(200);
