@@ -17,8 +17,10 @@ describe('Shopping List', function() {
         res.body.should.be.a('array');
         // because we create three items on app load
         res.body.should.have.length(3);
-        res.body[0].should.be.a('object');
-        res.body[0].should.include.keys('id', 'name', 'checked');
+        res.body.forEach(function(item) {
+          item.should.be.a('object');
+          item.should.include.keys('id', 'name', 'checked');
+        });
         done();
       })
   });
