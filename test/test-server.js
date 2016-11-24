@@ -7,13 +7,15 @@ chai.use(chaiHttp);
 
 let server;
 
+// create server afresh before each test in this module
 beforeEach(function() {
   server = require('../server');
 });
 
+// tear down server between each test in this module
 afterEach(function() {
   server.close();
-})
+});
 
 describe('Shopping List', function() {
 
@@ -48,6 +50,8 @@ describe('Shopping List', function() {
         res.body.should.be.a('object');
         res.body.should.include.keys('id', 'name', 'checked');
         res.body.id.should.not.be.null;
+        // response should be deep equal to `newItem` from above if we assign
+        // `id` to it from `res.body.id`
         res.body.should.deep.equal(Object.assign(newItem, {id: res.body.id}));
       });
       done();
