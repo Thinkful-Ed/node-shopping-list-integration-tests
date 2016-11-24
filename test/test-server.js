@@ -34,41 +34,52 @@ describe('Shopping List', function() {
           item.should.include.keys('id', 'name', 'checked');
         });
         done();
-      })
+      });
   });
+
   it('should add an item on POST', function(done) {
     const newItem = {name: 'coffee', checked: false};
     chai.request(server)
-      .post(newItem)
+      .post('/shopping-list')
+      .send(newItem)
       .end(function(err, res) {
-        res.should.have.status(204);
+        res.should.have.status(201);
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.include.keys('id', 'name', 'checked');
-        res.body.name.should.be(newItem.name);
-        res.body.checked.should.be(newItem.checked);
+        res.body.id.should.not.be.null;
+        res.body.should.deep.equal(Object.assign(newItem, {id: res.body.id}));
       });
       done();
   });
+
   it('should update items on PUT', function(done) {
     chai.request(server)
-      // first have to get
+      // first have to get so we have an idea of object to update
       .get('/shopping-list')
       .end(function(err, res) {
+        const updated = {
+          name: 'foo',
+          checked: true,
+          id: res.body[0].id
+        };
         chai.request(server)
-        // send it
           .put(`/shopping-list/${res.body[0].id}`)
-          .send({budget: 4, name: 'foo', checked: true, id: res.body[0].id})
+          .send(updated)
           .end(function(err, res) {
-            res.should.have.status(204);
-            // res.should.be.json;
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.deep.equal(updated);
           });
       })
       done();
   });
+
   it('should delete items on DELETE', function(done) {
     chai.request(server)
-      // first have to get
+      // first have to get so we have an `id` of item
+      // to delete
       .get('/shopping-list')
       .end(function(err, res) {
         chai.request(server)
