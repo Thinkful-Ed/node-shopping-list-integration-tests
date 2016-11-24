@@ -43,7 +43,7 @@ router.post('/', jsonParser, (req, res) => {
 // try to delete that item from ShoppingList.
 router.delete('/:id', (req, res) => {
   ShoppingList.delete(req.params.id);
-  console.log(`Deleted shopping list item \`${req.params.ID}\``);
+  console.log(`Deleted shopping list item \`${req.params.id}\``);
   res.status(204).end();
 });
 
