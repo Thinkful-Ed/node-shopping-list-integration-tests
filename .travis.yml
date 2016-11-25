@@ -4,6 +4,6 @@ deploy:
   provider: heroku
   api_key:
     secure: OQTQk/g5tlR4KB9WcB6QxOJQwmkcC24fDxcjj+J+tuFMOS0Q4d1KV9N12uJfI4F9LvolukLBRKRfcrGvg/UJSvnNjR2UGf5PWhhqOJCgrkxichmYWE6Smm8l7yuu/ckxnQWw1DuRUD+ruaJPu/7Ac1esFzyemV16s6UnSAlGWuOLuTV00JKQEO6fMoAzZDPacPSYATBM306fQ0AVQfiQAOjUivvupM8y7IGHnzPWexydiDtNjPkdyvbqq9Pfjc0NLc36iir8hbq9jinZu53jHLDotGL7dUVrkWNXQQcuDHe/snIMgQNl6tVoVq/IcGhRzg9nHTwBfq/khKCexgr+yYnMLVE/eJ1RzKaE4Vje4yjDcHL4HT7IE9l1KX2is11MC4FBoIN4z1ZnaGMlxFbwSdEqF7bfUaBBsV+pL4CeA+lfxs66uAsDXpcGji9EY/g1IjPyu3jy3U86j6xC5Wncp3VbPyznrQIWAY9oB6ZHsSAK2gP+zHu8o+WS9NyNGWH40WEtk6br5pS2CxtjNujH8IRZaS8NcL3sLTy3Yqazu7imWwsUCe4Q0ULzlpo1UX3Qp2+Zq4dWcmJ1t9puNhTOWYushzmXMQ/s1uJwq9aRGe69pNQLhljqK+Qzy8pi6Y7lx6p3zAoBCA8R4zhIzP8+InGvk7cqCqXKXuuxHN8JN/I=
-  app: node-shopping-list-integration-tests
+  app: shrouded-ravine-93286
   on:
     repo: sallystudent2017/node-shopping-list-integration-tests
