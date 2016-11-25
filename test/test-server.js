@@ -28,12 +28,13 @@ describe('Shopping List', function() {
         res.body.should.be.a('array');
 
         // because we create three items on app load
-        res.body.should.have.length(3);
+        res.body.length.should.be.at.least(1);
         // each item should be an object with key/value pairs
         // for `id`, `name` and `checked`.
+        const expectedKeys = ['id', 'name', 'checked'];
         res.body.forEach(function(item) {
           item.should.be.a('object');
-          item.should.include.keys('id', 'name', 'checked');
+          item.should.include.keys(expectedKeys);
         });
         done();
       });
