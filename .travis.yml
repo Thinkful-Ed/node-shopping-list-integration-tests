@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: oYXOqBtD+caOCr4CE2uUjU6f8Hcghzno3rq5F7PkyskSXQekF++LKF25i7aQ64NX6fDo5qLY8tXkXVx7BhBSnlEMBpXud4t513RWxH57XK10fU/TP2LXrCbob2IxjqQwRxopgWz/BeOByiX+o5c7vCPBJ9001DLolUP0BUF4ViZWV7K2j6XpeUNHPHQb7bJqaqsco6xg35qjOwkw+1U24lIfy4aAHhGA5B2gFQhjYRguuQeZtln6nzdIzgXLYBtI+Po8XJPzENbBg6Shn2BcVdm9cLk5WE64y5v1BfoS0UtcUTqOdY0WEJjugNW+IPJDZdl+cz43TmlIsKWmXyv2SCoWZ9rLHVYbcXcGeLfkc5AIOCF/rGGqVg2tVJeA1AtVLncSL6Zk9tDFXpkOFHZLvq1nVaUjkC6jsN456lwZ+yAd4YU4o0Py4jkrXxxdlrrkmCF14cjGy72Gun4qjRREpxah7EP5PtniCIgYlxLejgUSPJlQaisfGmL+OqR20FsfWc8IX3piymjJtSRqLpYh6f+fYc9Tj/h84xHKmap/Alhy+RikrM1VkprOxo4yrNmuwNgPb99UWa1IHRQIuS2jOf2XqtGUo2Uv/8/iji1uP6sUozt914HJqlEwDXxsKE3trLxLw7C8hNP1C5VtOO8hGvtbRwfrJnCvu//3KSpCFQs=
+  app: node-shopping-list-integration-tests
+  on:
+    repo: sallystudent2017/node-shopping-list-integration-tests
