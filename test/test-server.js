@@ -11,14 +11,20 @@ const should = chai.should();
 // see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
+
 let server;
 
-describe('Shopping List', function() {
+// create server afresh before each test in this module
+beforeEach(function() {
+  server = require('../server');
+});
 
-  // create server before tests run
-  before(function() {
-    server = require('../server');
-  });
+// tear down server between each test in this module
+afterEach(function() {
+  server.close();
+});
+
+describe('Shopping List', function() {
 
   // test strategy:
   //   1. make request to `/shopping-list`
