@@ -59,9 +59,11 @@ function closeServer() {
     console.log('Closing server');
     server.close(err => {
       if (err) {
-        return reject(err);
+        reject(err);
+        // so we don't also call `resolve()`
+        return;
       }
-      return resolve();
+      resolve();
     });
   });
 }
