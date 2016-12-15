@@ -57,7 +57,14 @@ function runServer() {
 function closeServer() {
   return new Promise((resolve, reject) => {
     console.log('Closing server');
-    return server.close(resolve);
+    server.close(err => {
+      if (err) {
+        reject(err);
+        // so we don't also call `resolve()`
+        return;
+      }
+      resolve();
+    });
   });
 }
 
