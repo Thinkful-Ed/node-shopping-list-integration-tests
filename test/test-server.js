@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const {app, runServer} = require('../server');
+const {app, runServer, closeServer} = require('../server');
 
 // this lets us use *should* style syntax in our tests
 // so we can do things like `(1 + 1).should.equal(2);`
@@ -23,6 +23,10 @@ describe('Shopping List', function() {
   // running before our server has started.
   before(function() {
     return runServer();
+  });
+
+  after(function() {
+    return closeServer();
   });
 
   // test strategy:
