@@ -1,115 +1,135 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
+// this lets us use *should* style syntax in our tests
+// so we can do things like `(1 + 1).should.equal(2);`
+// http://chaijs.com/api/bdd/
 const should = chai.should();
 
+// This let's us make HTTP requests
+// in our tests.
+// see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
 let server;
 
-// create the server afresh for each test in this module
+// create server afresh before each test in this module
 beforeEach(function() {
   server = require('../server');
 });
 
-// close down the server at the end of each test in this module
+// tear down server between each test in this module
 afterEach(function() {
   server.close();
 });
 
 describe('Shopping List', function() {
 
-  // show that GET /shopping-list returns array
-  // of objects with right keys
-  it('should list items on GET', function(done) {
-    // recall that we manually add some recipes to `Recipes`
-    // inside `recipesRouter.js`. Later in this course,
-    // once we're using a database layer, we'll seed
-    // our database with test data, and we can form our expectations
-    // about what GET should return, based on what we know about
-    // the state of our database.
-    chai.request(server)
+
+  // test strategy:
+  //   1. make request to `/shopping-list`
+  //   2. inspect response object and prove has right code and have
+  //   right keys in response object.
+  it('should list items on GET', function() {
+    // for Mocha tests, when we're dealing with asynchronous operations,
+    // we must either return a Promise object or else call a `done` callback
+    // at the end of the test. The `chai.request(server).get...` call is asynchronous
+    // and returns a Promise, so we just return it.
+    return chai.request(server)
       .get('/shopping-list')
-      .end(function(err, res) {
+      .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
-
-        res.body.should.have.length.of.at.least(1);
-
+        // because we create three items on app load
+        res.body.length.should.be.at.least(1);
         // each item should be an object with key/value pairs
         // for `id`, `name` and `checked`.
+        const expectedKeys = ['id', 'name', 'checked'];
         res.body.forEach(function(item) {
           item.should.be.a('object');
-          item.should.include.keys('id', 'name', 'checked');
+          item.should.include.keys(expectedKeys);
         });
-        done();
       });
   });
 
-  // show that POST requests to /shopping-list with right data
-  // yield a 201 and object representing the new shopping list
-  // item.
-  it('should add an item on POST', function(done) {
+  // test strategy:
+  //  1. make a POST request with data for a new item
+  //  2. inspect response object and prove it has right
+  //  status code and that the returned object has an `id`
+  it('should add an item on POST', function() {
     const newItem = {name: 'coffee', checked: false};
-    chai.request(server)
+    return chai.request(server)
       .post('/shopping-list')
       .send(newItem)
-      .end(function(err, res) {
+      .then(function(res) {
         res.should.have.status(201);
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.include.keys('id', 'name', 'checked');
-        res.body.name.should.equal(newItem.name);
-        res.body.checked.should.equal(newItem.checked);
         res.body.id.should.not.be.null;
+        // response should be deep equal to `newItem` from above if we assign
+        // `id` to it from `res.body.id`
+        res.body.should.deep.equal(Object.assign(newItem, {id: res.body.id}));
       });
-      done();
   });
 
+  // test strategy:
+  //  1. initialize some update data (we won't have an `id` yet)
+  //  2. make a GET request so we can get an item to update
+  //  3. add the `id` to `updateData`
+  //  4. Make a PUT request with `updateData`
+  //  5. Inspect the response object to ensure it
+  //  has right status code and that we get back an updated
+  //  item with the right data in it.
+  it('should update items on PUT', function() {
+    // we initialize our updateData here and then after the initial
+    // request to the server, we update it with an `id` property so
+    // we can make a second, PUT call to the server.
+    const updateData = {
+      name: 'foo',
+      checked: true
+    };
 
-  // show that PUT requests to /shopping-list/:id with right data
-  // yield a 200 code and object representing updated shopping list
-  // item
-  it('should update items on PUT', function(done) {
-    chai.request(server)
-      // first have to get
+    return chai.request(server)
+      // first have to get so we have an idea of object to update
       .get('/shopping-list')
-      .end(function(err, res) {
-        const updated = {
-          name: 'foo',
-          checked: true,
-          id: res.body[0].id
-        };
-        chai.request(server)
-        // send it
-          .put(`/shopping-list/${res.body[0].id}`)
-          .send(updated)
-          .end(function(err, res) {
-            res.should.have.status(200);
-            res.should.be.json;
-            res.body.name.should.equal(updated.name);
-            res.body.checked.should.equal(updated.checked);
-            res.body.id.should.equal(updated.id);
-          });
+      .then(function(res) {
+        updateData.id = res.body[0].id;
+        // this will return a promise whose value will be the response
+        // object, which we can inspect in the next `then` back. Note
+        // that we could have used a nested callback here instead of
+        // returning a promise and chaining with `then`, but we find
+        // this approach cleaner and easier to read and reason about.
+        return chai.request(server)
+          .put(`/shopping-list/${updateData.id}`)
+          .send(updateData);
       })
-      done();
+      // prove that the PUT request has right status code
+      // and returns updated item
+      .then(function(res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.deep.equal(updateData);
+      });
   });
 
-  // show that DELETE requests to /shopping-list/:id yield a 204. Later,
-  // once we learn about databases, we can check to see if the shopping
-  // list item with `id` has been deleted.
-  it('should delete items on DELETE', function(done) {
-    chai.request(server)
-      // first have to get
+  // test strategy:
+  //  1. GET a shopping list items so we can get ID of one
+  //  to delete.
+  //  2. DELETE an item and ensure we get back a status 204
+  it('should delete items on DELETE', function() {
+    return chai.request(server)
+      // first have to get so we have an `id` of item
+      // to delete
       .get('/shopping-list')
-      .end(function(err, res) {
-        chai.request(server)
-          .delete(`/shopping-list/${res.body[0].id}`)
-          .end(function(err, res) {
-            res.should.have.status(204);
-          });
+      .then(function(res) {
+        return chai.request(server)
+          .delete(`/shopping-list/${res.body[0].id}`);
+      })
+      .then(function(res) {
+        res.should.have.status(204);
       });
-      done();
   });
 });
