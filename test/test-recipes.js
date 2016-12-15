@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const {app, runServer} = require('../server');
+const {app, runServer, closeServer} = require('../server');
 
 const should = chai.should();
 
@@ -12,6 +12,10 @@ describe('Recipes', function() {
 
   before(function() {
     return runServer();
+  });
+
+  after(function() {
+    return closeServer();
   });
 
   it('should list recipes on GET', function() {
@@ -72,11 +76,7 @@ describe('Recipes', function() {
       // GET interface.
       .get('/recipes')
       .then(function(res) {
-        const updateData = {
-          name: 'foo',
-          ingredients: ['bizz', 'bang'],
-          id: res.body[0].id
-        };
+        updateData.id = res.body[0].id;
 
         return chai.request(app)
           .put(`/recipes/${updateData.id}`)
@@ -88,7 +88,7 @@ describe('Recipes', function() {
         res.body.should.include.keys('id', 'name', 'ingredients');
         res.body.name.should.equal(updateData.name);
         res.body.id.should.equal(updateData.id);
-        res.body.ingredients.should.include.members(updated.ingredients);
+        res.body.ingredients.should.include.members(updateData.ingredients);
       });
   });
 
