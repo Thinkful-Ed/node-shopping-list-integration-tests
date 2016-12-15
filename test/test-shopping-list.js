@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const {app, runServer} = require('../server');
+const {app, runServer, closeServer} = require('../server');
 
 // this lets us use *should* style syntax in our tests
 // so we can do things like `(1 + 1).should.equal(2);`
@@ -25,10 +25,9 @@ describe('Shopping List', function() {
   });
 
   after(function() {
-    return new Promise(function(resolve, reject) {
-      return server.close(resolve);
-    });
+    return closeServer();
   });
+
   // test strategy:
   //   1. make request to `/shopping-list`
   //   2. inspect response object and prove has right code and have
