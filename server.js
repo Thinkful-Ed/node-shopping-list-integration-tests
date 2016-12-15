@@ -24,8 +24,25 @@ app.get('/', (req, res) => {
 app.use('/shopping-list', shoppingListRouter);
 app.use('/recipes', recipesRouter);
 
-const server = app.listen(process.env.PORT || 8080, () => {
-  console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
-});
+// this function connects to our database, then starts the server
+function runServer() {
+  const port = process.env.PORT || 8080;
+  return new Promise((resolve, reject) => {
+    app.listen(port, () => {
+      console.log(`Your app is listening on port ${port}`);
+      resolve();
+    })
+    .on('error', err => {
+      mongoose.disconnect();
+      reject(err);
+    });
+  });
+}
 
-module.exports = server;
+// if server.js is called directly (aka, with `node server.js`), this block
+// runs. but we also export the runServer command so other code (for instance, test code) can start the server as needed.
+if (require.main === module) {
+  runServer().catch(err => console.error(err));
+};
+
+module.exports = {app, runServer};

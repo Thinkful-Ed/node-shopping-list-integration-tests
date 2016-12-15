@@ -1,6 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
+const {app, runServer} = require('../server');
+
 // this lets us use *should* style syntax in our tests
 // so we can do things like `(1 + 1).should.equal(2);`
 // http://chaijs.com/api/bdd/
@@ -12,19 +14,16 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 
-let server;
-
-// create server afresh before each test in this module
-beforeEach(function() {
-  server = require('../server');
-});
-
-// tear down server between each test in this module
-afterEach(function() {
-  server.close();
-});
-
 describe('Shopping List', function() {
+
+  // Before our tests run, we activate the server. Our `runServer`
+  // function returns a promise, and we return the that promise by
+  // doing `return runServer`. If we didn't return a promise here,
+  // there's a possibility of a race condition where our tests start
+  // running before our server has started.
+  before(function() {
+    return runServer();
+  });
 
   // test strategy:
   //   1. make request to `/shopping-list`
@@ -35,7 +34,7 @@ describe('Shopping List', function() {
     // we must either return a Promise object or else call a `done` callback
     // at the end of the test. The `chai.request(server).get...` call is asynchronous
     // and returns a Promise, so we just return it.
-    return chai.request(server)
+    return chai.request(app)
       .get('/shopping-list')
       .then(function(res) {
         res.should.have.status(200);
@@ -60,7 +59,7 @@ describe('Shopping List', function() {
   //  status code and that the returned object has an `id`
   it('should add an item on POST', function() {
     const newItem = {name: 'coffee', checked: false};
-    return chai.request(server)
+    return chai.request(app)
       .post('/shopping-list')
       .send(newItem)
       .then(function(res) {
@@ -85,14 +84,14 @@ describe('Shopping List', function() {
   //  item with the right data in it.
   it('should update items on PUT', function() {
     // we initialize our updateData here and then after the initial
-    // request to the server, we update it with an `id` property so
-    // we can make a second, PUT call to the server.
+    // request to the app, we update it with an `id` property so
+    // we can make a second, PUT call to the app.
     const updateData = {
       name: 'foo',
       checked: true
     };
 
-    return chai.request(server)
+    return chai.request(app)
       // first have to get so we have an idea of object to update
       .get('/shopping-list')
       .then(function(res) {
@@ -102,7 +101,7 @@ describe('Shopping List', function() {
         // that we could have used a nested callback here instead of
         // returning a promise and chaining with `then`, but we find
         // this approach cleaner and easier to read and reason about.
-        return chai.request(server)
+        return chai.request(app)
           .put(`/shopping-list/${updateData.id}`)
           .send(updateData);
       })
@@ -121,12 +120,12 @@ describe('Shopping List', function() {
   //  to delete.
   //  2. DELETE an item and ensure we get back a status 204
   it('should delete items on DELETE', function() {
-    return chai.request(server)
+    return chai.request(app)
       // first have to get so we have an `id` of item
       // to delete
       .get('/shopping-list')
       .then(function(res) {
-        return chai.request(server)
+        return chai.request(app)
           .delete(`/shopping-list/${res.body[0].id}`);
       })
       .then(function(res) {
