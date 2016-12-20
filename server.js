@@ -24,27 +24,14 @@ app.get('/', (req, res) => {
 app.use('/shopping-list', shoppingListRouter);
 app.use('/recipes', recipesRouter);
 
-// this function starts our server and returns a Promise.
-// In our test code, we need a way of asynchrnously starting
-// our server, since we'll be dealing with promises there.
-function runServer() {
-  const port = process.env.PORT || 8080;
-  return new Promise((resolve, reject) => {
-    app.listen(port, () => {
-      console.log(`Your app is listening on port ${port}`);
-      resolve();
-    })
-    .on('error', err => {
-      reject(err);
-    });
-  });
-}
-
 // both runServer and closeServer need to access the same
 // server object, so we declare `server` here, and then when
 // runServer runs, it assigns a value.
 let server;
 
+// this function starts our server and returns a Promise.
+// In our test code, we need a way of asynchrnously starting
+// our server, since we'll be dealing with promises there.
 function runServer() {
   const port = process.env.PORT || 8080;
   return new Promise((resolve, reject) => {
