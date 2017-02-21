@@ -30,7 +30,7 @@ app.use('/recipes', recipesRouter);
 let server;
 
 // this function starts our server and returns a Promise.
-// In our test code, we need a way of asynchrnously starting
+// In our test code, we need a way of asynchronously starting
 // our server, since we'll be dealing with promises there.
 function runServer() {
   const port = process.env.PORT || 8080;
