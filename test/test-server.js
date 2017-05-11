@@ -150,4 +150,21 @@ describe('Recipe', function () {
   after(function () {
     return closeServer();
   })
+
+  it('should get from recipes end point', function () {
+    return chai.request(app)
+      .get('/recipes')
+      .then(function (res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('array');
+
+        const objectKeys = ['id', 'ingredients', 'name'];
+
+        res.body.forEach(function (item) {
+          item.should.include.keys(objectKeys);
+        })
+      })
+  })
+
 });
