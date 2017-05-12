@@ -158,6 +158,7 @@ describe('Recipe', function () {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
+        res.body.length.should.be.at.least(1);
 
         const objectKeys = ['id', 'ingredients', 'name'];
 
@@ -166,5 +167,22 @@ describe('Recipe', function () {
         })
       })
   })
+
+  it('should post a new recipe', function () {
+    const newRecipe = { name: 'tacos', ingredients: 'tomatos' }
+    return chai.request(app)
+      .post('/recipes')
+      .send(newRecipe)
+      .then(function (res) {
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.include.keys('name', 'ingredients');
+        res.body.should.not.be.null;
+        res.body.should.deep.equal(Object.assign(newRecipe, { id: res.body.id }));
+      })
+  })
+
+
 
 });
