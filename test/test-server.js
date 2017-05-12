@@ -183,6 +183,24 @@ describe('Recipe', function () {
       })
   })
 
-
+  it('should modify an existing recipe, put', function () {
+    const updatedRecipe = {
+      name: 'steak taco',
+      ingredients: 'steak'
+    };
+    return chai.request(app)
+      .get('/recipes')
+      .then(function (res) {
+        updatedRecipe.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/recipes/${updatedRecipe.id}`)
+          .send(updatedRecipe);
+      }).then(function (res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.deep.equal(updatedRecipe);
+      })
+  })
 
 });
