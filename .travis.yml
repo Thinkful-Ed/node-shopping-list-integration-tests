@@ -7,7 +7,7 @@ deploy:
   provider: heroku
   api_key:
     secure: Iu8kQAeb216ATSxuyPB9jq6AOD10VoZVkrFQoIeFAVi4guqB7d42p+SCjLdrVUEU91tLCCPAWyMNsHB1qIZkGva/Etj4m7Zk3SBAop1pHJceAbR1hTWkArC2v5BEF9EndnkStItDhpWYcnJWm4JPYknRv1WohSLWDs5gbz25714yhnyMbjefx+/3RKqoYcTaJd7zfTyBuurGBKu678C8UgnVYjkwkgx9GgYmdr5eUxb8P9ISpoLImMzYOgDcU5xJSxFNSnMPJsKE+J/AUJPT01DIpVowVoXI51cOM2GduUlUzO0XU8yLcnWqt9tARbC9uBGUmp4I6Gmvjq686D37ajrOTO5fKBsr7lV7aUBKgNRP+nm8eMvSDlSKiQjphtyQ6jdon7MhPTYYKa8SmNlhuXnOtGR0Ki4jhK4DFfeKoQ1pdpZdFEOU7u1ToQym5ujcCY5wqc5Qmdw6cTnqmf/tV3eMwHebITa3nkNKUI38lQhhBXmbNyAbvcJ0zeJf4xPLqEjB4EMgKXYR8m/mpH76UZM9DfYsTMjOjwG/dmukR+zlKH9rrWltAirh5AXPHsmpiEmwC3Byc7LaLYPMj2lWrRDindCcUUoWmhVJ9N5/g2Zr9cBGFYsKAfm+7qkZCWKDOVRBtM/GFQ3jzmV61zwMls8TOg7mRlA8GU3DLm3zhss=
-  app: node-shopping-list-integration-tests
+  app: shrouded-beach-74797
   on:
     repo: motku/node-shopping-list-integration-tests
     branch: test-for-recipes
