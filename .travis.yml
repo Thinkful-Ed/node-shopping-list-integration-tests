@@ -1,2 +1,6 @@
 language: node_js
 node_js: node
+notifications:
+  slack:
+    rooms:
+      - reallybigwhale:MoYHyKX2fV2yX66XOjdG1b9C#alerts-low
