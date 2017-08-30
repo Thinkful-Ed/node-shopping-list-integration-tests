@@ -188,7 +188,7 @@ describe('Recipes', function(){
   });
 
   it('should update a recipe on PUT', function(){
-    const updateData = {
+    let updateData = {
       name: 'chocolate cake',
       ingredients: ['milk chocolate', 'flour', 'sugar', 'butter','baking soda']
     };
@@ -205,6 +205,26 @@ describe('Recipes', function(){
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.deep.equal(updateData);
+      });
+  });
+
+  // Edge case - PUT missing field.
+  it('should return missing field on PUT', function(){
+    let updateData = {
+      name: 'incomplete record'
+    };
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res){
+        updateData.id = res.body[0].id;
+        return chai.request(app)
+          .put(`/recipes/${updateData.id}`)
+          .send(updateData);
+      })
+      .catch(function(err){
+        err.response.should.have.status(400);
+        err.response.text.should.equal(`Missing \`ingredients\` in request body`);
+
       });
   });
 
