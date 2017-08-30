@@ -174,7 +174,6 @@ describe('Recipes', function(){
       name:'mac and cheese',
       ingredients:['mac pasta','cheese']
     };
-
     return chai.request(app)
       .post('/recipes')
       .send(newItem)
@@ -185,6 +184,28 @@ describe('Recipes', function(){
         res.body.should.include.keys('id','name','ingredients');
         res.body.id.should.not.be.null;
         res.body.should.deep.equal(Object.assign(newItem,{id:res.body.id}));
+      });
+  });
+
+  it('should update a recipe on PUT', function(){
+    const updateData = {
+      name: 'chocolate cake',
+      ingredients: ['milk chocolate', 'flour', 'sugar', 'butter','baking soda']
+    };
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res){
+        updateData.id = res.body[0].id;
+
+        return chai.request(app)
+          .put(`/recipes/${updateData.id}`)
+          .send(updateData);
+      })
+      .then(function(res){
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.deep.equal(updateData);
       });
   });
 
