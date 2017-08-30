@@ -196,7 +196,6 @@ describe('Recipes', function(){
       .get('/recipes')
       .then(function(res){
         updateData.id = res.body[0].id;
-
         return chai.request(app)
           .put(`/recipes/${updateData.id}`)
           .send(updateData);
@@ -206,6 +205,18 @@ describe('Recipes', function(){
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.deep.equal(updateData);
+      });
+  });
+
+  it('should delete a recipe on DELETE', function(){
+    return chai.request(app)
+      .get('/recipes')
+      .then(function(res){
+        return chai.request(app)
+          .delete(`/recipes/${res.body[0].id}`)
+      })
+      .then(function(res){
+        res.should.have.status(204);
       });
   });
 
