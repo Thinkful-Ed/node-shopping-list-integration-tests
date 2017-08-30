@@ -168,4 +168,24 @@ describe('Recipes', function(){
         });
       });
     });
+
+  it('should add a recipe on POST', function(){
+    const newItem = {
+      name:'mac and cheese',
+      ingredients:['mac pasta','cheese']
+    };
+
+    return chai.request(app)
+      .post('/recipes')
+      .send(newItem)
+      .then(function(res){
+        res.should.have.status(201);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.include.keys('id','name','ingredients');
+        res.body.id.should.not.be.null;
+        res.body.should.deep.equal(Object.assign(newItem,{id:res.body.id}));
+      });
+  });
+
 });
