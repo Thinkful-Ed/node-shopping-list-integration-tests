@@ -224,7 +224,6 @@ describe('Recipes', function(){
       .catch(function(err){
         err.response.should.have.status(400);
         err.response.text.should.equal(`Missing \`ingredients\` in request body`);
-
       });
   });
 
