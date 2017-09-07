@@ -13,7 +13,6 @@ const should = chai.should();
 // see: https://github.com/chaijs/chai-http
 chai.use(chaiHttp);
 
-
 describe('Shopping List', function() {
 
   // Before our tests run, we activate the server. Our `runServer`
@@ -49,7 +48,6 @@ describe('Shopping List', function() {
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
-
         // because we create three items on app load
         res.body.length.should.be.at.least(1);
         // each item should be an object with key/value pairs
@@ -117,10 +115,7 @@ describe('Shopping List', function() {
       // prove that the PUT request has right status code
       // and returns updated item
       .then(function(res) {
-        res.should.have.status(200);
-        res.should.be.json;
-        res.body.should.be.a('object');
-        res.body.should.deep.equal(updateData);
+        res.should.have.status(204);
       });
   });
 
