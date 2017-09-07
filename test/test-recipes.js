@@ -83,12 +83,7 @@ describe('Recipes', function() {
           .send(updateData)
       })
       .then(function(res) {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.body.should.include.keys('id', 'name', 'ingredients');
-        res.body.name.should.equal(updateData.name);
-        res.body.id.should.equal(updateData.id);
-        res.body.ingredients.should.include.members(updateData.ingredients);
+        res.should.have.status(204);
       });
   });
 
