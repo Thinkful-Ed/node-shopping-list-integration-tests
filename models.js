@@ -1,3 +1,5 @@
+'use strict';
+
 const uuid = require('uuid');
 
 // this module provides volatile storage, using a `ShoppingList`
