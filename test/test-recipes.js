@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http');
 
 const {app, runServer, closeServer} = require('../server');
 
-const should = chai.should();
+const expect = chai.expect;
 
 chai.use(chaiHttp);
 
@@ -29,17 +29,17 @@ describe('Recipes', function() {
       .get('/recipes')
       .then(function(res) {
 
-        res.should.have.status(200);
-        res.should.be.json;
-        res.body.should.be.a('array');
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('array');
 
-        res.body.should.have.length.of.at.least(1);
+        expect(res.body).to.have.length.of.at.least(1);
 
         // each item should be an object with key/value pairs
         // for `id`, `name` and `ingredients`.
         res.body.forEach(function(item) {
-          item.should.be.a('object');
-          item.should.include.keys('id', 'name', 'ingredients');
+          expect(item).to.be.a('object');
+          expect(item).to.include.keys('id', 'name', 'ingredients');
         });
       });
   });
@@ -51,13 +51,13 @@ describe('Recipes', function() {
       .post('/recipes')
       .send(newRecipe)
       .then(function(res) {
-        res.should.have.status(201);
-        res.should.be.json;
-        res.body.should.be.a('object');
-        res.body.should.include.keys('id', 'name', 'ingredients');
-        res.body.name.should.equal(newRecipe.name);
-        res.body.ingredients.should.be.a('array');
-        res.body.ingredients.should.include.members(newRecipe.ingredients);
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id', 'name', 'ingredients');
+        expect(res.body.name).to.equal(newRecipe.name);
+        expect(res.body.ingredients).to.be.a('array');
+        expect(res.body.ingredients).to.include.members(newRecipe.ingredients);
       });
   });
 
@@ -80,10 +80,10 @@ describe('Recipes', function() {
 
         return chai.request(app)
           .put(`/recipes/${updateData.id}`)
-          .send(updateData)
+          .send(updateData);
       })
       .then(function(res) {
-        res.should.have.status(204);
+        expect(res).to.have.status(204);
       });
   });
 
@@ -97,10 +97,10 @@ describe('Recipes', function() {
       .get('/recipes')
       .then(function(res) {
         return chai.request(app)
-          .delete(`/recipes/${res.body[0].id}`)
+          .delete(`/recipes/${res.body[0].id}`);
       })
       .then(function(res) {
-        res.should.have.status(204);
+        expect(res).to.have.status(204);
       });
   });
 });
