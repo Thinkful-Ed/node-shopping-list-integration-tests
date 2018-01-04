@@ -30,7 +30,7 @@ router.post('/', jsonParser, (req, res) => {
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`
+      const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
@@ -56,7 +56,7 @@ router.put('/:id', jsonParser, (req, res) => {
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`
+      const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
@@ -74,7 +74,7 @@ router.put('/:id', jsonParser, (req, res) => {
     name: req.body.name,
     ingredients: req.body.ingredients
   });
-  res.status(204).end();
-})
+  res.status(200).json(updatedItem);
+});
 
 module.exports = router;
