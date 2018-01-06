@@ -3,10 +3,10 @@ const chaiHttp = require('chai-http');
 
 const {app, runServer, closeServer} = require('../server');
 
-// this lets us use *should* style syntax in our tests
-// so we can do things like `(1 + 1).should.equal(2);`
+// this lets us use *expect* style syntax in our tests
+// so we can do things like `expect(1 + 1).to.equal(2);`
 // http://chaijs.com/api/bdd/
-const should = chai.should();
+const expect = chai.expect;
 
 // This let's us make HTTP requests
 // in our tests.
@@ -46,18 +46,18 @@ describe('Shopping List', function() {
     return chai.request(app)
       .get('/shopping-list')
       .then(function(res) {
-        res.should.have.status(200);
-        res.should.be.json;
-        res.body.should.be.a('array');
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('array');
 
         // because we create three items on app load
-        res.body.length.should.be.at.least(1);
+        expect(res.body.length).to.be.at.least(1);
         // each item should be an object with key/value pairs
         // for `id`, `name` and `checked`.
         const expectedKeys = ['id', 'name', 'checked'];
         res.body.forEach(function(item) {
-          item.should.be.a('object');
-          item.should.include.keys(expectedKeys);
+          expect(item).to.be.a('object');
+          expect(item).to.include.keys(expectedKeys);
         });
       });
   });
@@ -72,14 +72,14 @@ describe('Shopping List', function() {
       .post('/shopping-list')
       .send(newItem)
       .then(function(res) {
-        res.should.have.status(201);
-        res.should.be.json;
-        res.body.should.be.a('object');
-        res.body.should.include.keys('id', 'name', 'checked');
-        res.body.id.should.not.be.null;
+        expect(res).to.have.status(201);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys('id', 'name', 'checked');
+        expect(res.body.id).to.not.equal(null);
         // response should be deep equal to `newItem` from above if we assign
         // `id` to it from `res.body.id`
-        res.body.should.deep.equal(Object.assign(newItem, {id: res.body.id}));
+        expect(res.body).to.deep.equal(Object.assign(newItem, {id: res.body.id}));
       });
   });
 
@@ -106,7 +106,7 @@ describe('Shopping List', function() {
       .then(function(res) {
         updateData.id = res.body[0].id;
         // this will return a promise whose value will be the response
-        // object, which we can inspect in the next `then` back. Note
+        // object, which we can inspect in the next `then` block. Note
         // that we could have used a nested callback here instead of
         // returning a promise and chaining with `then`, but we find
         // this approach cleaner and easier to read and reason about.
@@ -115,13 +115,17 @@ describe('Shopping List', function() {
           .send(updateData);
       })
       // prove that the PUT request has right status code
+      // and returns updated item
       .then(function(res) {
-        res.should.have.status(204);
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.deep.equal(updateData);
       });
   });
 
   // test strategy:
-  //  1. GET a shopping list items so we can get ID of one
+  //  1. GET shopping list items so we can get ID of one
   //  to delete.
   //  2. DELETE an item and ensure we get back a status 204
   it('should delete items on DELETE', function() {
@@ -134,7 +138,7 @@ describe('Shopping List', function() {
           .delete(`/shopping-list/${res.body[0].id}`);
       })
       .then(function(res) {
-        res.should.have.status(204);
+        expect(res).to.have.status(204);
       });
   });
 });
