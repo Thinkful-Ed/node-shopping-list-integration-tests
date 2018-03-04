@@ -42,7 +42,7 @@ router.post('/', jsonParser, (req, res) => {
 // Delete recipes (by id)!
 router.delete('/:id', (req, res) => {
   Recipes.delete(req.params.id);
-  console.log(`Deleted shopping list item \`${req.params.ID}\``);
+  console.log(`Deleted shopping list item \`${req.params.id}\``);
   res.status(204).end();
 });
 
