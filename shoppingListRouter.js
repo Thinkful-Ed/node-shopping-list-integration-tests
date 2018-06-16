@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
-
 const {ShoppingList} = require('./models');
 
 // we're going to add some items to ShoppingList
@@ -23,7 +20,7 @@ router.get('/', (req, res) => {
 // got required fields ('name' and 'checked'). if not,
 // log an error and return a 400 status code. if okay,
 // add new item to ShoppingList and return it with a 201.
-router.post('/', jsonParser, (req, res) => {
+router.post('/', (req, res) => {
   // ensure `name` and `budget` are in request body
   const requiredFields = ['name', 'checked'];
   for (let i=0; i<requiredFields.length; i++) {
@@ -52,7 +49,7 @@ router.delete('/:id', (req, res) => {
 // item id in updated item object match. if problems with any
 // of that, log error and send back status code 400. otherwise
 // call `ShoppingList.update` with updated item.
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', (req, res) => {
   const requiredFields = ['name', 'checked', 'id'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];

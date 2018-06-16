@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 const app = express();
+app.use(express.json());
 
 const shoppingListRouter = require('./shoppingListRouter');
 const recipesRouter = require('./recipesRouter');

@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
-
-
 const {Recipes} = require('./models');
 
 // we're going to add some recipes to Recipes
@@ -24,13 +20,13 @@ router.get('/', (req, res) => {
 // when new recipe added, ensure has required fields. if not,
 // log error and return 400 status code with hepful message.
 // if okay, add new item, and return it with a status 201.
-router.post('/', jsonParser, (req, res) => {
+router.post('/', (req, res) => {
   // ensure `name` and `budget` are in request body
   const requiredFields = ['name', 'ingredients'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`
+      const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
@@ -51,12 +47,12 @@ router.delete('/:id', (req, res) => {
 // recipe id in updated item object match. if problems with any
 // of that, log error and send back status code 400. otherwise
 // call `Recipes.updateItem` with updated recipe.
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', (req, res) => {
   const requiredFields = ['name', 'ingredients', 'id'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`
+      const message = `Missing \`${field}\` in request body`;
       console.error(message);
       return res.status(400).send(message);
     }
@@ -69,12 +65,12 @@ router.put('/:id', jsonParser, (req, res) => {
     return res.status(400).send(message);
   }
   console.log(`Updating shopping list item \`${req.params.id}\``);
-  const updatedItem = Recipes.update({
+  Recipes.update({
     id: req.params.id,
     name: req.body.name,
     ingredients: req.body.ingredients
   });
   res.status(204).end();
-})
+});
 
 module.exports = router;
