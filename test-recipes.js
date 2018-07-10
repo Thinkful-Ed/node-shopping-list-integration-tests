@@ -52,19 +52,20 @@ describe("Recipes", function() {
   //  2. inspect response object and prove it has right
   //  status code and that the returned object has an `id`
   it("should add an item on POST", function() {
-    const newItem = { name: "PB&J", ingredients: ["peanut butter", "bread", "jelly"]  };
+    const newRecipe = { name: "PB&J", ingredients: ["peanut butter", "bread", "jelly"]  };
     return chai
       .request(app)
       .post("/recipes")
-      .send(newItem)
+      .send(newRecipe)
       .then(function(res) {
         expect(res).to.have.status(201);
         expect(res).to.be.json;
         expect(res.body).to.be.a("object");
         expect(res.body).to.include.keys("id", "name", "ingredients");
+        expect(res.body.name).to.equal(newRecipe.name);
+        expect(res.body.ingredients).to.be.a('array');
+        expect(res.body.ingredients).to.include.members(newRecipe.ingredients);
         expect(res.body.id).to.not.equal(null);
-        // response should be deep equal to `newItem` from above if we assign
-        // `id` to it from `res.body.id`
         expect(res.body).to.deep.equal(
           Object.assign(newItem, { id: res.body.id })
         );
