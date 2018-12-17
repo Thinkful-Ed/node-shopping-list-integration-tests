@@ -67,5 +67,5 @@ function closeServer() {
 if (require.main === module) {
   runServer().catch(err => console.error(err));
 }
-
+//The reason it is formated like this is because it creates a new object. This new object contains the function app, runServer, closeServer.
 module.exports = { app, runServer, closeServer };

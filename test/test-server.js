@@ -1,6 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 
+//this takes the function app, runServer, closeServer from server.js
 const { app, runServer, closeServer } = require("../server");
 
 // this lets us use *expect* style syntax in our tests
@@ -94,9 +95,6 @@ describe("Shopping List", function() {
   //  has right status code and that we get back an updated
   //  item with the right data in it.
   it("should update items on PUT", function() {
-    // we initialize our updateData here and then after the initial
-    // request to the app, we update it with an `id` property so
-    // we can make a second, PUT call to the app.
     const updateData = {
       name: "foo",
       checked: true
@@ -109,11 +107,6 @@ describe("Shopping List", function() {
         .get("/shopping-list")
         .then(function(res) {
           updateData.id = res.body[0].id;
-          // this will return a promise whose value will be the response
-          // object, which we can inspect in the next `then` block. Note
-          // that we could have used a nested callback here instead of
-          // returning a promise and chaining with `then`, but we find
-          // this approach cleaner and easier to read and reason about.
           return chai
             .request(app)
             .put(`/shopping-list/${updateData.id}`)
@@ -138,8 +131,6 @@ describe("Shopping List", function() {
     return (
       chai
         .request(app)
-        // first have to get so we have an `id` of item
-        // to delete
         .get("/shopping-list")
         .then(function(res) {
           return chai.request(app).delete(`/shopping-list/${res.body[0].id}`);
